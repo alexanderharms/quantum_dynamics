@@ -2,7 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 
-def animate_1d(psi, environment):
+def animate_1d(psi, environment, 
+               animname='./output/animation_1d.mp4'):
     # Animate absolute value of the wave function
     psi_mag = np.absolute(psi)
     psi_mag_max = np.max(psi_mag)
@@ -25,4 +26,4 @@ def animate_1d(psi, environment):
 
     anim = FuncAnimation(fig, animate, init_func=init,
                          frames=psi_mag.shape[1], interval=20, blit=True)
-    anim.save('./output/animation_1d.mp4', writer='ffmpeg')
+    anim.save(animname, writer='ffmpeg')

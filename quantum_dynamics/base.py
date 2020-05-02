@@ -1,5 +1,4 @@
 import numpy as np
-from sympy.functions.special.delta_functions import Heaviside
 
 from .solvers import CrankNicholson1D
 
@@ -20,13 +19,37 @@ class SquareWell1D(BaseEnvironment):
         super().__init__(num_dims, size, num_nodes)
         self.potential = np.zeros(self.num_nodes)
 
-    def set_potential(self, size_pot):
-        pot_val = 1e6
+    def set_potential(self, size_pot, pot_val=1e6):
         pot = self.potential
         for node in range(self.num_nodes):
             pot[node] =  -pot_val \
-                    * (Heaviside(size_pot[0]/self.node_spacing - node)
-                    - Heaviside(size_pot[1]/self.node_spacing - node))
+                    * (np.heaviside(int(size_pot[0]/self.node_spacing) 
+                        - node, 1)
+                    - np.heaviside(int(size_pot[1]/self.node_spacing) 
+                        - node, 1))
+        self.potential = pot
+        self.pot_val = pot_val
+
+class Barrier1D(BaseEnvironment):
+    def __init__(self, size, num_nodes):
+        num_dims = 1
+        super().__init__(num_dims, size, num_nodes)
+        self.potential = np.zeros(self.num_nodes)
+
+    def set_potential(self, size_pot, pot_val, barrier_width=None):
+        if barrier_width is None:
+            self.barrier_width = 7.0 / \
+                    (self.node_spacing * np.sqrt(2 * pot_val))
+        else: 
+            self.barrier_width = barrier_width
+
+        pot = self.potential
+        for node in range(self.num_nodes):
+            pot[node] =  -pot_val \
+                    * (np.heaviside(int(size_pot[0]/self.node_spacing) 
+                        - node, 1)
+                    - np.heaviside(int(size_pot[1] / 
+                        self.node_spacing + self.barrier_width) - node, 1))
         self.potential = pot
 
 class BaseWave1D():
