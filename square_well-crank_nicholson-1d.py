@@ -1,6 +1,7 @@
 import numpy as np
 
-from quantum_dynamics.base import SquareWell1D, PulseWave1D
+from quantum_dynamics.environments import SquareWell1D
+from quantum_dynamics.waves import PulseWave1D
 from quantum_dynamics.vis import animate_1d
 
 # Set parameters
