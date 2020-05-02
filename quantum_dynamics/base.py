@@ -7,8 +7,8 @@ class BaseEnvironment():
     def __init__(self, num_dims, size, num_nodes):
         self.num_dims = num_dims
         self.size = size 
-        assert self.num_dims == len(self.size), \
-                "Defined environment size does not match dimensionality"
+        #assert self.num_dims == len(self.size), \
+        #        "Defined environment size does not match dimensionality"
 
         self.num_nodes = num_nodes
         self.node_spacing = (size[1] - size[0]) / (num_nodes-1)  
@@ -23,10 +23,10 @@ class SquareWell1D(BaseEnvironment):
     def set_potential(self, size_pot):
         pot_val = 1e6
         pot = self.potential
-        for node in range(num_nodes):
+        for node in range(self.num_nodes):
             pot[node] =  -pot_val \
-                    * (Heaviside(size_pot[0]/node_space - node)
-                    - Heaviside(size_pot[1]/node_space - node))
+                    * (Heaviside(size_pot[0]/self.node_spacing - node)
+                    - Heaviside(size_pot[1]/self.node_spacing - node))
         self.potential = pot
 
 class BaseWave1D():

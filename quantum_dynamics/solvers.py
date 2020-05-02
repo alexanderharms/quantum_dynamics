@@ -5,23 +5,23 @@ import scipy.sparse.linalg as splinalg
 class CrankNicholson1D():
     """ Mixin class for Crank Nicholson solver in 1D. """
     def prep_solver(self, dt):
-        space_vec = self.space_vec
-        num_nodes = self.num_nodes
+        node_spacing = self.environment.node_spacing
+        num_nodes = self.environment.num_nodes
         pot = self.environment.potential
 
         # Make left hand side matrix
-        A = sp.diags([1/(4*space_vec**2), 
-                      1j/dt - 1/(2*space_vec**2), 
-                      1/(4*space_vec**2)], 
+        A = sp.diags([1/(4*node_spacing**2), 
+                      1j/dt - 1/(2*node_spacing**2), 
+                      1/(4*node_spacing**2)], 
                       [-1, 0 ,1], 
                       shape=(num_nodes, num_nodes)).tolil()
         A -= 0.5 * sp.diags(pot, 0)
         A = A.tocsc()
 
         # Make right hand side vector
-        B = sp.diags([-1 / (4*space_vec**2), 
-                      1j/dt + 1/(2*space_vec**2), 
-                      -1 / (4*space_vec**2)], 
+        B = sp.diags([-1 / (4*node_spacing**2), 
+                      1j/dt + 1/(2*node_spacing**2), 
+                      -1 / (4*node_spacing**2)], 
                       [-1, 0, 1], 
                       shape=(num_nodes, num_nodes)).tolil()
         B += 0.5 * sp.diags(pot, 0)

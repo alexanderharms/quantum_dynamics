@@ -23,10 +23,10 @@ psi_animate = np.zeros(shape=(num_nodes, animation_frames),
                        dtype=np.cfloat)
 
 sq_well = SquareWell1D(env_bnd, num_nodes)
-sq_well = sq_well.set_potential(pot_bnd)
+sq_well.set_potential(pot_bnd)
 
 pulse = PulseWave1D(pos_init, mom_init, sq_well)
-pulse = pulse.generate_pulse(pulse_width)
+pulse.generate_pulse(pulse_width)
 pulse.prep_solver(dt)
 
 anim_count = 0

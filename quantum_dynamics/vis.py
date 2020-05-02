@@ -1,9 +1,10 @@
+import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 
 def animate_1d(psi, environment):
     # Animate absolute value of the wave function
-    psi_mag = np.absolute(psi, axis = 0)
+    psi_mag = np.absolute(psi)
     psi_mag_max = np.max(psi_mag)
 
     fig = plt.figure()
@@ -18,8 +19,8 @@ def animate_1d(psi, environment):
         return psi_line, pot_line
 
     def animate(i):
-        psi_line.set_data(space_vec, psi_mag[:, i])
-        pot_line.set_data(space_vec, environment.potential)
+        psi_line.set_data(environment.space_vec, psi_mag[:, i])
+        pot_line.set_data(environment.space_vec, environment.potential)
         return psi_line, pot_line
 
     anim = FuncAnimation(fig, animate, init_func=init,
