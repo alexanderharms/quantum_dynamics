@@ -24,4 +24,12 @@ class BaseWave1D():
         self.mom_init = mom_init
         self.environment = environment
 
+class BaseWave2D():
+    def __init__(self, pos_init, mom_init, environment):
+        self.psi = np.zeros((environment.num_nodes[0] + 
+                             environment.num_nodes[1], 2)), 
+                             dtype=np.cfloat)
+        self.pos_init = pos_init
+        self.mom_init = mom_init
+        self.environment = environment
 

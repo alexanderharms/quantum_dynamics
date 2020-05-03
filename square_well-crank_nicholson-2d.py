@@ -9,7 +9,7 @@ dt = 1e-5  # timestep size
 env_bnd = [0, 1]
 pot_bnd = [0.30, 0.55]
 
-num_nodes = 2**8
+num_nodes = [2**8, 2**8]
 timesteps = 20000
 
 # Initial wave pulse
@@ -23,10 +23,10 @@ animation_frames = int((timesteps+1)/anim_constant)
 psi_animate = np.zeros(shape=(num_nodes, animation_frames), 
                        dtype=np.cfloat)
 
-sq_well = SquareWell1D(env_bnd, num_nodes)
+sq_well = SquareWell2D(env_bnd, num_nodes)
 sq_well.set_potential(pot_bnd)
 
-pulse = PulseWave1D(pos_init, mom_init, sq_well)
+pulse = PulseWave2D(pos_init, mom_init, sq_well)
 pulse.generate_pulse(pulse_width)
 pulse.prep_solver(dt)
 
@@ -35,7 +35,7 @@ for t in range(timesteps):
     pulse.solve()
 
     if (t+1) % anim_constant == 0:
-        psi_animate[:, anim_count] = pulse.psi
+        psi_animate[:, :, anim_count] = pulse.psi.reshape(num_nodes[0], -1)
         anim_count += 1
 
 
