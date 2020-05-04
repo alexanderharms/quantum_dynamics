@@ -9,7 +9,7 @@ dt = 1e-5  # timestep size
 env_bnd = [0, 1]
 pot_bnd = [0.30, 0.55]
 
-num_nodes = 2**8
+num_nodes = 2**3
 timesteps = 20000
 
 # Initial wave pulse
@@ -25,6 +25,8 @@ psi_animate = np.zeros(shape=(num_nodes, animation_frames),
 
 sq_well = SquareWell1D(env_bnd, num_nodes)
 sq_well.set_potential(pot_bnd)
+print(sq_well.potential)
+exit()
 
 pulse = PulseWave1D(pos_init, mom_init, sq_well)
 pulse.generate_pulse(pulse_width)

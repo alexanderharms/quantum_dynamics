@@ -52,7 +52,12 @@ class CrankNicholson2D():
                         1/(4*node_spacing[0]**2)], 
                       [-1, 0 ,1], 
                       shape=(num_nodes[0], num_nodes[0])).tolil()
-        A = sp.kron(A_0, I_0) + sp.kron(I_0, A_0)
+        A_1 = sp.diags([1/(4*node_spacing[1]**2), 
+                        1j/dt - 1/(2*node_spacing[1]**2), 
+                        1/(4*node_spacing[1]**2)], 
+                      [-1, 0 ,1], 
+                      shape=(num_nodes[1], num_nodes[1])).tolil()
+        A = sp.kron(A_0, I_0) + sp.kron(I_1, A_1)
         A -= 0.5 * sp.diags(pot.reshape(-1), 0)
         A = A.tocsc()
 
@@ -62,7 +67,12 @@ class CrankNicholson2D():
                         -1 / (4*node_spacing[0]**2)], 
                       [-1, 0, 1], 
                       shape=(num_nodes[0], num_nodes[0])).tolil()
-        B = sp.kron(B_0, I_0) + sp.kron(I_0, B_0)
+        B_1 = sp.diags([-1 / (4*node_spacing[1]**2), 
+                        1j/dt + 1/(2*node_spacing[1]**2), 
+                        -1 / (4*node_spacing[1]**2)], 
+                      [-1, 0, 1], 
+                      shape=(num_nodes[1], num_nodes[1])).tolil()
+        B = sp.kron(B_0, I_0) + sp.kron(I_1, B_1)
         B += 0.5 * sp.diags(pot.reshape(-1), 0)
         B = B.tocsc()
 
@@ -71,7 +81,12 @@ class CrankNicholson2D():
     def solve(self):
         A = self.solver_preparations[0]
         B = self.solver_preparations[1]
+        num_nodes = self.environment.num_nodes
+        # To solve in 2D, the wave function is reshaped using lexicographic
+        # ordering.
+        psi_lex_ord = self.psi.reshape(-1)
 
-        b = B.dot(self.psi)
-        self.psi = splinalg.bicgstab(A, b)[0]
-        self.psi = self.psi / np.linalg.norm(self.psi, axis=0)
+        b = B.dot(psi_lex_ord)
+        psi_lex_ord = splinalg.bicgstab(A, b)[0]
+        self.psi = psi_lex_ord.reshape(num_nodes[0], num_nodes[1])
+        self.psi = self.psi / np.linalg.norm(self.psi)

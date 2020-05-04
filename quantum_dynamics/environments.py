@@ -9,21 +9,21 @@ class SquareWell1D(BaseEnvironment1D):
 
     def set_potential(self, size_pot, pot_val=1e6):
         self.potential = -pot_val \
-                * (np.heaviside(size_pot[0] - self.space_vec, 1)
-                - np.heaviside(size_pot[1] - self.space_vec, 1))
+                * (np.heaviside(size_pot[1] - self.space_vec, 1)
+                - np.heaviside(size_pot[0] - self.space_vec, 1))
 
 class SquareWell2D(BaseEnvironment2D):
     def __init__(self, size, num_nodes):
         super().__init__(size, num_nodes)
-        self.potential = np.zeros((self.num_nodes, self.num_nodes))
+        self.potential = np.zeros((self.num_nodes[0], self.num_nodes[1]))
 
     def set_potential(self, size_pot, pot_val=1e6):
-        self.potential[:, 0] = -pot_val \
-                * (np.heaviside(size_pot[0, 0] - self.space_vec[:, 0], 1)
-                - np.heaviside(size_pot[0, 1] - self.space_vec[:, 0], 1))
-        self.potential[:, 1] = -pot_val \
-                * (np.heaviside(size_pot[1, 0] - self.space_vec[:, 1], 1)
-                - np.heaviside(size_pot[1, 1] - self.space_vec[:, 1], 1))
+        size_pot = np.array(size_pot)
+        self.potential = -pot_val \
+                * (np.heaviside(size_pot[0, 1] - self.space_vec[0], 1) + 
+                   np.heaviside(size_pot[1, 1] - self.space_vec[1], 1)
+                - np.heaviside(size_pot[0, 0] - self.space_vec[0], 1) +
+                  np.heaviside(size_pot[1, 0] - self.space_vec[1], 1)) 
 
 class Barrier1D(BaseEnvironment1D):
     def __init__(self, size, num_nodes):
