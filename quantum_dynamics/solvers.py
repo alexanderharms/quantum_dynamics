@@ -38,7 +38,7 @@ class CrankNicholson1D():
         self.psi = self.psi / np.linalg.norm(self.psi)
 
 class CrankNicholson2D():
-    """ Mixin class for Crank Nicholson solver in 1D. """
+    """ Mixin class for Crank Nicholson solver in 2D. """
     def prep_solver(self, dt):
         node_spacing = self.environment.node_spacing
         num_nodes = self.environment.num_nodes

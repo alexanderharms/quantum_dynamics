@@ -8,16 +8,16 @@ import matplotlib.pyplot as plt
 # Set parameters
 dt = 1e-5  # timestep size
 env_bnd = [[0, 1], [0, 1]]
-pot_bnd = [[0.3, 0.7], [0.2, 0.8]]
+pot_bnd = [[0.3, 0.7], [0.3, 0.7]]
 
-num_nodes = [2**3, 2**3]
-timesteps = 15000
+num_nodes = [2**7, 2**7]
+timesteps = 5000
 
 # Initial wave pulse
 pos_init = [0.5, 0.5] 
 # Initial momentum
-mom_init = [500, 500] 
-pulse_width = [1/2**7, 1/2**4]
+mom_init = [0, 0] 
+pulse_width = [1/2**8, 1/2**8]
 
 # Only record every 10th frame for the animation
 anim_constant = 10
@@ -28,12 +28,11 @@ psi_animate = np.zeros(shape=(num_nodes[0], num_nodes[1],
 
 print("Generate square well potential...")
 sq_well = SquareWell2D(env_bnd, num_nodes)
-sq_well.set_potential(pot_bnd)
-print(sq_well.potential)
+sq_well.set_potential(pot_bnd, pot_val=1e7)
 
 print("Generate pulse and prep solver...")
 pulse = PulseWave2D(pos_init, mom_init, sq_well)
-pulse.generate_pulse(pulse_width)
+pulse.generate_wave(pulse_width)
 pulse.prep_solver(dt)
 
 print("Start solving...")

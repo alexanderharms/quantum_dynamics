@@ -7,9 +7,9 @@ from quantum_dynamics.vis import animate_1d
 # Set parameters
 dt = 1e-5  # timestep size
 env_bnd = [0, 1]
-pot_bnd = [0.30, 0.55]
+pot_bnd = [0, 1]
 
-num_nodes = 2**3
+num_nodes = 2**8
 timesteps = 20000
 
 # Initial wave pulse
@@ -25,11 +25,9 @@ psi_animate = np.zeros(shape=(num_nodes, animation_frames),
 
 sq_well = SquareWell1D(env_bnd, num_nodes)
 sq_well.set_potential(pot_bnd)
-print(sq_well.potential)
-exit()
 
 pulse = PulseWave1D(pos_init, mom_init, sq_well)
-pulse.generate_pulse(pulse_width)
+pulse.generate_wave(pulse_width)
 pulse.prep_solver(dt)
 
 anim_count = 0

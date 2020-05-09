@@ -18,7 +18,7 @@ class BaseEnvironment2D():
         lin_y = np.linspace(self.size[1, 0], self.size[1, 1], 
                             self.num_nodes[1])
         space_x, space_y = np.meshgrid(lin_x, lin_y)
-        self.space_vec = [space_x, space_y]
+        self.space_vec = [space_x.T, space_y.T]
 
 class BaseWave1D():
     def __init__(self, pos_init, mom_init, environment):

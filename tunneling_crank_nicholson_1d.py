@@ -7,7 +7,7 @@ from quantum_dynamics.vis import animate_1d
 # Set parameters
 dt = 1e-5  # timestep size
 env_bnd = [0, 1]
-pot_bnd = [0.30, 0.55]
+barrier_loc = [0.6]
 
 num_nodes = 2000
 timesteps = 450
@@ -25,10 +25,10 @@ psi_animate = np.zeros(shape=(num_nodes, animation_frames),
                        dtype=np.cfloat)
 
 barrier = Barrier1D(env_bnd, num_nodes)
-barrier.set_potential(pot_bnd, pot_val=energy_init/0.6)
+barrier.set_potential(pot_val=energy_init/0.6, barrier_loc=barrier_loc)
 
 pulse = PulseWave1D(pos_init, mom_init, barrier)
-pulse.generate_pulse(pulse_width)
+pulse.generate_wave(pulse_width)
 pulse.prep_solver(dt)
 
 anim_count = 0
